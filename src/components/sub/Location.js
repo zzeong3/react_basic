@@ -37,6 +37,7 @@ export default function Location () {
 
     const container = useRef(null);
     // useRef를 이용해서 가상돔을 참조 할 변수로 컨테이너를 생성한뒤, null 값으로 빈 구역을 만들어둠.
+    const btns = useRef(null);
     const [Location, SetLocation] = useState(null);
     // useEffect에서 만들어진 지도 인스턴스를 담을 state를 생성하는것
     const [Traffic, setTraffic] = useState(false);
@@ -45,8 +46,7 @@ export default function Location () {
     //setInfo는 info가 바뀔일이 없으므로 필요가 없다.
     const [Index, setIndex] = useState(0);
     // index가 변화될때 렌더링 필요하므로 useState에 담아 관리한다.
-    const li = useRef(null);
-
+ 
 
     // 1차로 지도를 쫙 뿌려줌
     const option = { //지도를 생성할 때 필요한 기본 옵션
@@ -76,11 +76,31 @@ export default function Location () {
 
     // 맵api 리액트로 옮기는 
     useEffect(()=>{
+        container.current.innerHTML = ''; // 포폴가이드에 어필!
+
         // 지도 인스턴스 최종 생성
-       const map_instance = new kakao.maps.Map(container.current, option);
-       // 지도 인스턴스를 활용해서 마커를 생성하는 코드 (우리가 지정한 마커)
-       marker.setMap(map_instance); // 우리가 만든 함수를 카카오가 만든 함수(setMap)에 넣기, (좌표, 이미지)
-       SetLocation(map_instance);
+        const map_instance = new kakao.maps.Map(container.current, option);
+        // 지도 인스턴스를 활용해서 마커를 생성하는 코드 (우리가 지정한 마커)
+        marker.setMap(map_instance); // 우리가 만든 함수를 카카오가 만든 함수(setMap)에 넣기, (좌표, 이미지)
+        SetLocation(map_instance);
+
+        //지도, 스카이뷰
+        const mapTypeControl = new kakao.maps.MapTypeControl();
+        map_instance.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+
+        // 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
+        const zoomControl = new kakao.maps.ZoomControl();
+        map_instance.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+
+        // 본점,지점1/2 on클래스 토글
+        for (const btn of btns.current.children) btn.classList.remove('on');
+        btns.current.children[Index].classList.add('on');
+
+        window.addEventListener('resize', ()=>{
+            map_instance.setCenter(Info[Index].latlng);
+        });
+
     }, [Index]); // 기존 컴포넌트가 처음 마우튼 되었을 때만 지도를 출력하던 방삭에서, Index가  변경될때마다 지도가 다시 랜더링 되는 방식으로 바꿈
 
 
@@ -97,7 +117,7 @@ export default function Location () {
     }, [Traffic]); //=> traffic state 값이 변경될때 마다 실행 되는 구문'
 
     useEffect(()=>{
-        li.current.classList.add('on');
+        
     })
 
 
@@ -113,15 +133,16 @@ export default function Location () {
                     {/* Traffic의 값에 따라서 버튼의 내용도 변경 */}
                     {Traffic ? 'Traffiic OFF' : 'Traffiic ON'}
                 </button>
-                <ul className="branch">
+                <ul className="branch" ref={btns}>
                     {/* 각 버튼을 클릭할때마다 Index의 값을 변경 */}
                     {/* <li onClick={()=>setIndex(0)}>본점</li>
                     <li onClick={()=>setIndex(1)}>지점1</li>
                     <li onClick={()=>setIndex(2)}>지점2</li> */}
                     {
                         Info.map((el, idx)=>{
+
                             return(
-                                <li key={idx} onClick={()=>{setIndex(idx)}} ref={li}>
+                                <li key={idx} onClick={()=>{setIndex(idx)}}>
                                     {el.title}
                                 </li>
                             )
