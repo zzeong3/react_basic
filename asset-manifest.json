@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "//zzeong3.github.io//react_basic/static/css/main.aa5b8978.css",
-    "main.js": "//zzeong3.github.io//react_basic/static/js/main.75f97b7f.js",
-    "index.html": "//zzeong3.github.io//react_basic/index.html",
-    "main.aa5b8978.css.map": "//zzeong3.github.io//react_basic/static/css/main.aa5b8978.css.map",
-    "main.75f97b7f.js.map": "//zzeong3.github.io//react_basic/static/js/main.75f97b7f.js.map"
+    "main.css": "/react_basic/static/css/main.aa5b8978.css",
+    "main.js": "/react_basic/static/js/main.e1e8a299.js",
+    "index.html": "/react_basic/index.html",
+    "main.aa5b8978.css.map": "/react_basic/static/css/main.aa5b8978.css.map",
+    "main.e1e8a299.js.map": "/react_basic/static/js/main.e1e8a299.js.map"
   },
   "entrypoints": [
     "static/css/main.aa5b8978.css",
-    "static/js/main.75f97b7f.js"
+    "static/js/main.e1e8a299.js"
   ]
 }
