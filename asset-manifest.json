@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "//zzeong3.github.io//react_basic/static/css/main.aa5b8978.css",
+    "main.js": "//zzeong3.github.io//react_basic/static/js/main.75f97b7f.js",
+    "index.html": "//zzeong3.github.io//react_basic/index.html",
+    "main.aa5b8978.css.map": "//zzeong3.github.io//react_basic/static/css/main.aa5b8978.css.map",
+    "main.75f97b7f.js.map": "//zzeong3.github.io//react_basic/static/js/main.75f97b7f.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.aa5b8978.css",
+    "static/js/main.75f97b7f.js"
+  ]
+}
