@@ -116,10 +116,6 @@ export default function Location () {
 
     }, [Traffic]); //=> traffic state 값이 변경될때 마다 실행 되는 구문'
 
-    useEffect(()=>{
-        
-    })
-
 
     return (
         <Layout name={'Location'}>
