@@ -7,8 +7,7 @@ import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 
 //main
-import Contents from './components/main/Contents';
-import Visual from './components/main/Visual';
+import Main from './components/main/Main';
 
 //sub
 import Community from './components/sub/Community';
@@ -24,23 +23,12 @@ function App() {
       {/* Switch는 같은 경로의 라우터 연결시 구체적인 라우터 하나만 적용한다. */}
       <Switch>
 
-        <Route exact path='/'>
-          {/* 
-            메인에만 적용하는 header 
-            exact는 ' / ' 이것만 불러와라!
-            메인페이지으로 인식을 해서고 이곳을 헤더를 읽어준다.
-           */}
-          <Header type={'main'} />
-          {/* props으로 type={'main'}으로 메인 props이 있는 스타일을 적용시켜 메인 헤더를 스타일링하게 한다 */}
-          <Visual />
-          <Contents />
-        </Route>
-
-        <Route path='/'>
-          {/* 서브페이지 모두에 적용하는 header로 '/' 이후에 어떤 주소가 있으면 서브페이지의 헤더로 인식하여 이곳의 헤더를 읽어준다. */}
-          <Header type={'sub'} />
-          {/* props으로 type={'sub'}으로 메인 props이 있는 스타일을 적용시켜 서브 헤더를 스타일링하게 한다 */}
-        </Route>
+        <Route exact path='/' component={Main} />
+        <Route path='/' render={()=><Header type={'sub'} />} />
+            {/* 서브페이지 모두에 적용하는 header로 '/' 이후에 어떤 주소가 있으면 서브페이지의 헤더로 인식하여 이곳의 헤더를 읽어준다. */}
+            {/* <Header type={'sub'} /> */}
+            {/* props으로 type={'sub'}으로 메인 props이 있는 스타일을 적용시켜 서브 헤더를 스타일링하게 한다 */}
+            {/* render 함수 props으로 헤더 연결 */}
 
       </Switch>
       

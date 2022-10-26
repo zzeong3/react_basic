@@ -3,14 +3,14 @@
 
 import Layout from "../common/Layout";
 import axios from 'axios';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Popup from "../common/Popup";
 
 export default function Youtube() {
 
     const [Vids, setVids] = useState([]); // 비디오 리스트 뿌려주는
-    const [Open, setOpen] = useState(false); // 비디오 팝업 열어주는
     const [Index, setIndex] = useState(0); // 비디오 리스트랑 팝업 연결하는
+    const pop = useRef(null);
 
     useEffect(()=>{
         const key = 'AIzaSyAy6VlenkzBMN3Yy81EdqHO80h8HkvzNJw';
@@ -42,8 +42,8 @@ export default function Youtube() {
                             <span>{date.split('T')[0]}</span>
                         </div>
                         <div className="pic" onClick={()=>{ 
-                                setOpen(true)
-                                setIndex(index)
+                                pop.current.open(); // 자식(Popup.js)에 있는 컴포넌트 전달
+                                setIndex(index);
                             }}>
                             <img src={data.snippet.thumbnails.standard.url} alt={data.snippet.title} />
                         </div>
@@ -52,9 +52,12 @@ export default function Youtube() {
             })}
         </Layout>
 
-        {Open && <Popup setOpen={setOpen}>
-            <iframe src={`https://www.youtube.com/embed/${Vids[Index].snippet.resourceId.videoId}`} frameborder="0"></iframe>    
-        </Popup>}
+        <Popup ref={pop}>
+            {Vids.length !== 0 && (
+                    <iframe src={`https://www.youtube.com/embed/${Vids[Index].snippet.resourceId.videoId}`} frameborder="0"></iframe>    
+                )
+            }
+        </Popup>
         </>
     )
 }

@@ -6,12 +6,19 @@ import { faBars } from '@fortawesome/free-solid-svg-icons'
 export default function Header(props) {
     const active = {color: 'salmon'};
 
+    let url = ' ';
+    props.type === 'main'
+        ? (url = process.env.PUBLIC_URL + '/img/logo_w.png')
+        : (url = process.env.PUBLIC_URL + '/img/logo_b.png');
+
     return(
         <header className={props.type}>
             <div className="inner">
                 <h1>
                     {/* <NavLink exact to='/' activeStyle={active}>LOGO</NavLink> */}
-                    <Link to='/'>LOGO</Link>
+                    <Link to='/'>
+                        <img src={url} alt="logo" />
+                    </Link>
                 </h1>
                 <ul id="gnb">
                     <li>
