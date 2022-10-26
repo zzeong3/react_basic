@@ -1,28 +1,11 @@
-import Anime from '../../asset/Anime';
 
 
-const btn = {
-    position : 'absolute',
-    top : 120,
-    left : 100,
-}
 
 export default function Visual() {
 
     return(
         <figure id="visual" className='myScroll'>
-            <button
-                style={btn}
-                onClick={() => {
-                    new Anime(window, {
-                        prop: 'scroll',
-                        value: 6000,
-                        duration: 500,
-
-                    })
-                }}
-
-            >button</button>
+            <video src={process.env.PUBLIC_URL + '/img/vid1.mp4'} loop autoPlay muted></video>
         </figure>
     )
 }

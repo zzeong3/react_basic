@@ -1,4 +1,5 @@
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Popup =forwardRef ((props, ref) => {
 
@@ -15,15 +16,25 @@ const Popup =forwardRef ((props, ref) => {
     }, [Open]); //팝업 마운트 될때마다 실행s
 
     return (
-    <>
+    <AnimatePresence>
         {Open && (
-            <aside className="pop">
-                <div className="con">{props.children}</div> 
+            <motion.aside className="pop" 
+            initial={{opacity:0, scale:0}} 
+            animate={{opacity:1, scale:1, transition: {duration:.5}}}
+            exit={{opacity:0, scale:0, transition: {duration:.5, delay:.5}}}>
+                <motion.div className="con"
+                initial={{opacity:0}}
+                animate={{opacity:1, transition:{duration:.5, delay:1}}}
+                exit={{opacity:0, transition:{delay:0}}}
+                >{props.children}</motion.div> 
                 {/* 팝업 요소의 자식요소를 불러와랑 */}
-                <span className="close" onClick={() => { setOpen(false) }}>close</span>
-            </aside>
+                <motion.span 
+                initial={{x:50, opacity:0}} 
+                animate={{x:0, opacity:1, transition:{delay:1}}}
+                className="close" onClick={() => { setOpen(false) }}>close</motion.span>
+            </motion.aside>
         )}
-    </> 
+    </AnimatePresence> 
     );
 });
 export default Popup;

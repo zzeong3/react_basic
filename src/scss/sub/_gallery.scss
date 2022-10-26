@@ -76,6 +76,7 @@
                         color:orange;cursor:pointer;
                         transition: .5s;
                         font-size:12px;
+                        word-break:break-all;
                         &:hover {
                             color:aqua;
                         }
