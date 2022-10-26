@@ -59,7 +59,7 @@
     createDOM();
 
     //Promise.all()로 loadImg, loadedVid 함수가 모두 프로미스를 객체를 반환할때까지 동기화
-    Promise.all([loadImg(), loadedVid()])
+    Promise.all([loadImg(), loadVid()])
       .then(result => {
         const [loadedImg, loadedVid] = result;
 
