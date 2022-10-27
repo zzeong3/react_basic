@@ -1,4 +1,9 @@
 import { Route, Switch } from 'react-router-dom';
+// 유투브 메인으로 불러야할 준비!
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { setYoutube, setMembers } from './redux/action';
+import axios from 'axios';
 
 import './scss/style.scss';
 
@@ -18,6 +23,30 @@ import Location from './components/sub/Location';
 import Youtube from './components/sub/Youtube';
 
 function App() {
+  const dispatch = useDispatch();
+
+  const getYoutube = async () => {
+		const key = 'AIzaSyAy6VlenkzBMN3Yy81EdqHO80h8HkvzNJw';
+		const playlist = "PL-LezOK-mmmM9TeSYLloKdebev5DWkYII";
+		const num = 6;
+		const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&key=${key}&playlistId=${playlist}&maxResults=${num}`;
+
+		const result = await axios.get(url);
+		dispatch(setYoutube(result.data.items));
+	}
+
+	const getMembers = async () => {
+		const url = process.env.PUBLIC_URL + '/DB/members.json';
+		const result = await axios.get(url);
+		dispatch(setMembers(result.data.members))
+	}
+
+	useEffect(() => {
+		getYoutube();
+		getMembers();
+	}, []);
+    
+
   return (
     <>
       {/* Switch는 같은 경로의 라우터 연결시 구체적인 라우터 하나만 적용한다. */}

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import Layout from '../common/Layout';
+import { useSelector, useDispatch } from 'react-redux';
 
 export default function Location () {
     const {kakao} = window;
@@ -46,7 +47,7 @@ export default function Location () {
     //setInfo는 info가 바뀔일이 없으므로 필요가 없다.
     const [Index, setIndex] = useState(0);
     // index가 변화될때 렌더링 필요하므로 useState에 담아 관리한다.
- 
+
 
     // 1차로 지도를 쫙 뿌려줌
     const option = { //지도를 생성할 때 필요한 기본 옵션
@@ -117,6 +118,9 @@ export default function Location () {
     }, [Traffic]); //=> traffic state 값이 변경될때 마다 실행 되는 구문'
 
 
+    const path = process.env.PUBLIC_URL;
+    const Members = useSelector((store) => store.memberReducer.members);
+
     return (
         <Layout name={'Location'}>
             <div id="map" ref= {container}></div>
@@ -145,7 +149,19 @@ export default function Location () {
                         })
                     }
                 </ul>
-            </div>  
+            </div>
+            {
+                Members.map((member, idx) => {
+                    if (idx >= 2 ) return;
+                    return (
+                        <>
+                        <img src={`${path}/img/${member.pic}`} alt={member.name} />
+                        <h3>{member.name}</h3>
+                        <p>{member.position}</p>
+                        </>
+                    )
+                })
+            }
         </Layout>
     )
 }

@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 export default function News() {
+    const Members = useSelector((store) => store.memberReducer.members);
 
     // 초기 데이터 기능은 커뮤니티에서 -> 뉴스로 옮김 (초기셋팅은 여기서)
     const getLocalData = () => {   
@@ -59,6 +61,16 @@ export default function News() {
                     </article>
                 )
             })} 
+
+            {
+                Members.map((member, idx) => {
+                    if (idx >= 2 ) return;
+                    return (
+                        <p key={member.name}>{member.name}</p>
+                    )
+                })
+            }
+            
         </main>
         
     );

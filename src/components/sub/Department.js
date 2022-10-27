@@ -1,20 +1,15 @@
-import Layout from '../common/Layout';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import Layout from "../common/Layout";
+import { useSelector } from 'react-redux';
 
-export default function Department(){
+export default function Department() {
     const path = process.env.PUBLIC_URL;
-    const [Members, setMembers] = useState([]);
+    const Members = useSelector((store) => store.memberReducer.members)
 
-    useEffect(()=>{
-        axios.get(`${path}/DB/members.json`).then((json)=>{
-            setMembers(json.data.members);
-        })
-    }, []);
-    
-    return(
+
+    return (
         <Layout name={'Department'}>
-            {Members.map((data, index)=>{
+
+            {Members.map((data, index) => {
                 return (
                     <article key={index}>
                         <div className="inner">
@@ -26,21 +21,10 @@ export default function Department(){
                         </div>
                     </article>
                 );
-            })} 
+            })}
+
+
+
         </Layout>
     );
 }
-
-
-
-// import React from "react"
-// export default function Department() {
-//     return(
-//         <section className="content department">
-//             <figure></figure>
-//             <div className="inner">
-//                 <h1>Department</h1>
-//             </div>
-//         </section>
-//     )
-// }
