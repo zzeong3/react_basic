@@ -20,7 +20,7 @@ import Gallery from './components/sub/Gallery';
 import Member from './components/sub/Member';
 import Location from './components/sub/Location';
 import Youtube from './components/sub/Youtube';
-import * as types from './redux/actionType';
+// import * as types from './redux/actionType';
 
 function App() {
   const dispatch = useDispatch();
@@ -28,8 +28,8 @@ function App() {
   dispatch({ type: 'types.MEMBERS.start' });
 
 	useEffect(() => {
-		dispatch({
-      type: 'types.YOUTUBE.start'
+		// dispatch({
+    //   type: 'types.YOUTUBE.start'
     })
 
 		
@@ -57,9 +57,9 @@ function App() {
       
       
 
-      <Route path='/department' component={Department} />
+      {/* <Route path='/department' component={Department} /> */}
       <Route path='/youtube' component={Youtube} />
-      <Route path='/gallery' component={Gallery} />
+      {/* <Route path='/gallery' component={Gallery} /> */}
       <Route path='/community' component={Community} />
       <Route path='/location' component={Location} />
       <Route path='/member' component={Member} />

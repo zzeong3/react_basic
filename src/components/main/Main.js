@@ -90,8 +90,8 @@ export default function Main() {
         <main ref = {main} className='myScroll'>
             <Header type={'main'} />
             <Visual />
-            <News />
-            <Pics Scrolled={Scrolled} start={pos.current[2]}/>
+            {/* <News /> */}
+            {/* <Pics Scrolled={Scrolled} start={pos.current[2]}/> */}
             <Vids />
             <Btns setIndex={setIndex} />
         </main>

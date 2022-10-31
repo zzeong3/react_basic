@@ -92,7 +92,7 @@ export default function Gallery(){
     // Opt state 값이 변경될때마다 해당 구문 호출되면서
     // dispatch saga 에 FLICKR_START 라는 액션타입으로 Opt 정보값을 전달
     useEffect(()=>{
-        dispatch({type: 'types.FLICKR.start', Opt})
+        
     },[Opt])
 
     // store부터 최종 데이터가 전달이 되면
