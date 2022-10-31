@@ -2,7 +2,7 @@
 // playList = PL-LezOK-mmmM9TeSYLloKdebev5DWkYII
 
 import Layout from "../common/Layout";
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 import Popup from "../common/Popup";
 import { useSelector } from "react-redux";
 

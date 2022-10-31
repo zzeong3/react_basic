@@ -5,13 +5,15 @@
 import { useEffect, useRef, useState } from 'react';
 import Layout from '../common/Layout';
 import Popup from '../common/Popup';
-import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
 import Masonry from 'react-masonry-component';
 
 export default function Gallery(){
     
+    const dispatch = useDispatch(); //flickr_start 타입의 액션전달한 dispatch 함수 활성화
+    const Items = useSelector(store => store.flickrReducer.flickr); //store 부터 전역 flickr데이터를 가져옴
     const masonryOption = { transitionDuration: '.5s' };
-    const [Items, setItems] = useState([]);
+    const [Opt, setOpt] = useState({type: 'user' , user : '188875987@N03'}); // 액션 객체에 담아서 saga에 전달한 초기 전달한 Opt 값으로 내 유저 정보 설정
     const [Loading, setLoading] = useState(true);
     const [EnableClick, setEnableClick] = useState(true);
     const [Index, setIndex] = useState(0); // 리스트랑 팝업 연결하는
@@ -39,55 +41,70 @@ export default function Gallery(){
     //     })
     // }, []);
 
-    const getFlickr = async (opt) => {
-        const key = 'b0df1caf2be4e4a4a3efd41e6897ef7b';
-        const method_interest = 'flickr.interestingness.getList';
-        const method_search = 'flickr.photos.search';
-        const method_user = 'flickr.people.getPhotos';
-        const num = 40;
-        let url = ' ';
-        
-        if( opt.type === 'interest') {
-            url = `https://www.flickr.com/services/rest/?method=${method_interest}&per_page=${num}&api_key=${key}&format=json&nojsoncallback=1`;
-        }
-        if( opt.type === 'search') {
-            url = `https://www.flickr.com/services/rest/?method=${method_search}&per_page=${num}&api_key=${key}&format=json&nojsoncallback=1&tags=${opt.tags}`
-        }
-        if( opt.type === 'user') {
-            url = `https://www.flickr.com/services/rest/?method=${method_user}&per_page=${num}&api_key=${key}&format=json&nojsoncallback=1&user_id=${opt.user}`;
-        }
 
-        const result = await axios.get(url);
-        //console.log(result.data.photos.photo);
-        if (result.data.photos.photo.length  === 0) return alert ('해당 검색어의 결과 이미지가 없습니다.') 
-        setItems(result.data.photos.photo);
 
-        // 셋타임아웃으로 비동기화 시키고 1초 딜레이를 준뒤 로딩바를 안보이게 false로 바뀐 뒤에 on을 프레임에 붙여서 보이게 한다.
-        setTimeout(() => {
-            setLoading(false);
-            frame.current.classList.add('on');
-            setTimeout(() => {
-                setEnableClick(true);
-            }, 500); // frame에 on 붙이고 위로 올라오는 모션 기간 동안 .5초 홀딩
-        }, 1000); // 이미지 호출이 완료되고 masonry모션 적용시간까지 홀딩하는 1초
-       
-    };
 
-    useEffect (() => getFlickr({type : 'user', user: '188875987@N03'}), [])
-    // 함수의 정의 형태로 콜백함수가 들어와야한다. 함수를 단순 호출하는 형태는 읽어들일수없다.
     const showSearch = () => {
         const result = input.current.value.trim();
         input.current.value = '';
 
-        if(!result) return alert ('검색어를 입력하세요');
+        if (!result) return alert('검색어를 입력하세요');
 
+        if (!EnableClick) return;
+        setEnableClick(false);
+        setLoading(true);
+        frame.current.classList.remove('on');
+        setOpt({ type: 'search', tags: result, });
+    };
+
+    const showInterest = () => {
+        if(!EnableClick) return;
+        // 모션중이면 false일테니  return으로 방지
+        setEnableClick(false);
+        // true로 들어와서 다시 false로 바꾸어 재이벤트 방지
+        setLoading(true);
+        frame.current.classList.remove('on');
+        setOpt({type: 'interest'});
+    }
+
+    const showMine = () => {
+        if(!EnableClick) return;
+        // 모션중이면 false일테니  return으로 방지
+        setEnableClick(false);
+        // true로 들어와서 다시 false로 바꾸어 재이벤트 방지
+        setLoading(true);
+        frame.current.classList.remove('on');
+        setOpt({type : 'user', user: '188875987@N03'});
+    }
+
+    const showUser = (e) => {
         if(!EnableClick) return;
         setEnableClick(false);
         setLoading(true);
         frame.current.classList.remove('on');
-        getFlickr({type : 'search', tags : result,});
-    };
+        setOpt({type : 'user', user : e.target.innerText}); // 클릭한 애 텍스트가 저어어 주소로 넘어가서 그 아이디의 이미지가 불러옴
+    }
 
+
+    useEffect (showMine, [])
+    // 함수의 정의 형태로 콜백함수가 들어와야한다. 함수를 단순 호출하는 형태는 읽어들일수없다.
+
+    // Opt state 값이 변경될때마다 해당 구문 호출되면서
+    // dispatch saga 에 FLICKR_START 라는 액션타입으로 Opt 정보값을 전달
+    useEffect(()=>{
+        dispatch({type: 'types.FLICKR.start', Opt})
+    },[Opt])
+
+    // store부터 최종 데이터가 전달이 되면
+    // 컨텐츠에 보이도록 처리
+    useEffect(()=>{
+        setTimeout(()=>{
+            frame.current.classList.add('on');
+            setLoading(false);
+            setEnableClick(true);
+        },500)
+    },[Items])
+    
 
     return(
         <>
@@ -97,28 +114,8 @@ export default function Gallery(){
                 )}
                 <div className="controls">
                     <nav>
-                        <button onClick={() => {
-                            if(!EnableClick) return;
-                            // 모션중이면 false일테니  return으로 방지
-                            setEnableClick(false);
-                            // true로 들어와서 다시 false로 바꾸어 재이벤트 방지
-                            setLoading(true);
-                            frame.current.classList.remove('on');
-                            getFlickr({type: 'interest'});
-                        }}>
-                            Interest Gallery
-                        </button>
-                        <button onClick={() => {
-                            if(!EnableClick) return;
-                            // 모션중이면 false일테니  return으로 방지
-                            setEnableClick(false);
-                            // true로 들어와서 다시 false로 바꾸어 재이벤트 방지
-                            setLoading(true);
-                            frame.current.classList.remove('on');
-                            getFlickr({type : 'user', user: '188875987@N03'});
-                        }}>
-                            My Gallery
-                        </button>
+                        <button onClick={showInterest}>Interest Gallery</button>
+                        <button onClick={showMine}>My Gallery</button>
                     </nav>
                     <div className="searchBox">
                         <input type="text" ref={input} placeholder="검색어를 입력하세요." 
@@ -154,14 +151,7 @@ export default function Gallery(){
                                                 );
                                             }}
                                             />
-                                            <span onClick={(e) => {
-                                                if(!EnableClick) return;
-                                                setEnableClick(false);
-                                                setLoading(true);
-                                                frame.current.classList.remove('on');
-                                                getFlickr({type : 'user', user : e.target.innerText}); // 클릭한 애 텍스트가 저어어 주소로 넘어가서 그 아이디의 이미지가 불러옴
-                                            }}
-                                            >{item.owner}</span>
+                                            <span onClick={showUser}>{item.owner}</span>
                                         </div>
                                     </div>
                                 </article>

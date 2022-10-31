@@ -1,25 +1,40 @@
 #vids {
     width:100%;height:100vh;
-    background:#eeffc6;
+    background:linear-gradient(45deg, violet, cornflowerblue);
     position:relative;
-    padding:10vw;
+    
 
     .swiper {
         height:100%;
+        padding:15vh 0;
+
         .swiper-slide {
-            width:100%;
+            width:600px;
             .inner {
                 width:100%;
                 height:100%;
+                padding:30px;
                 background:#fff;
-                display:flex;
-                justify-content:center;
-                align-items:center;
-                font:bold 50px/1 'arial';
-                color:#666;
                 opacity:.5;
                 transform:scale(.8);
-                transition:opacity .5s, transform .5s
+                transition:opacity .5s, transform .5s;
+
+                .pic {
+                    width:100%;
+                    height:200px;
+                    overflow:hidden;
+                    margin-bottom: 20px;
+                    cursor:pointer;
+
+                    img {
+                        width:100%;height:100%;object-fit:cover
+                    }
+                }
+                h2 {
+                    font:normal 25px/1.4 'work sans';
+                    color:#555;
+
+                }
             }
             &.swiper-slide-active {
                 .inner {
@@ -27,6 +42,32 @@
                     transform:scale(1);
                 }
             }
+        }
+
+        .swiper-pagination {
+            
+            bottom:40px;
+            filter:grayscale(1) brightness(4);
+            .swiper-pagination-bullet {
+                border-radius:4px;
+                transition:.5s;
+            }
+            .swiper-pagination-bullet-active {
+                width:80px;border-radius:40px;
+            }
+        }
+
+        .swiper-button-prev, .swiper-button-next {
+            z-index:20;
+            top:auto;
+            bottom:40px;
+            transform: scale(.5);
+            filter:grayscale(1) brightness(4);
+
+        }
+        .swiper-button-prev {
+            left:auto;
+            right:60px;
         }
     }
 }
