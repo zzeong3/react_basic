@@ -2,28 +2,16 @@
 // playList = PL-LezOK-mmmM9TeSYLloKdebev5DWkYII
 
 import Layout from "../common/Layout";
-import axios from 'axios';
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
+import { useSelector } from "react-redux";
 import Popup from "../common/Popup";
 
 export default function Youtube() {
 
-    const [Vids, setVids] = useState([]); // 비디오 리스트 뿌려주는
     const [Index, setIndex] = useState(0); // 비디오 리스트랑 팝업 연결하는
     const pop = useRef(null);
+    const Vids = useSelector(store => store.youtube.data);
 
-    useEffect(()=>{
-        const key = 'AIzaSyAy6VlenkzBMN3Yy81EdqHO80h8HkvzNJw';
-        const playList = 'PL-LezOK-mmmM9TeSYLloKdebev5DWkYII';
-        const num = 9;
-        const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&key=${key}&playlistId=${playList}&maxResults=${num}`;
-
-        axios.get(url).then((json)=>{
-            console.log(json.data.items);
-            setVids(json.data.items);
-        });
-
-    }, []); // [] 한번만
 
     return (
         <>

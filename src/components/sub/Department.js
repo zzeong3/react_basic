@@ -1,17 +1,8 @@
 import Layout from '../common/Layout';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 export default function Department(){
-    const path = process.env.PUBLIC_URL;
-    const [Members, setMembers] = useState([]);
-
-    useEffect(()=>{
-        axios.get(`${path}/DB/members.json`).then((json)=>{
-            setMembers(json.data.members);
-        })
-    }, []);
-    
+    const Members = useSelector(store=> store.members.data)
     return(
         <Layout name={'Department'}>
             {Members.map((data, index)=>{
@@ -19,7 +10,7 @@ export default function Department(){
                     <article key={index}>
                         <div className="inner">
                             <div className="pic">
-                                <img src={`${path}/img/${data.pic}`} alt={data.name} />
+                                <img src={`${process.env.PUBLIC_URL}/img/${data.pic}`} alt={data.name} />
                             </div>
                             <h3>{data.name}</h3>
                             <p>{data.position}</p>

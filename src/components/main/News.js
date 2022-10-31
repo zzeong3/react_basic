@@ -1,65 +1,58 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
+import { useSelector } from 'react-redux';
 
-export default function News() {
+function News() {
+    const Members = useSelector(store => store.members.data);
 
-    // 초기 데이터 기능은 커뮤니티에서 -> 뉴스로 옮김 (초기셋팅은 여기서)
-    const getLocalData = () => {   
+    const getLocalData = () => {
         const dummyPosts = [
-            {
-                title : 'hello5',
-                content : 'here comes description in details5'
-            },
-            {
-                title : 'hello4',
-                content : 'here comes description in details4'
-            },
-            {
-                title : 'hello3',
-                content : 'here comes description in details3'
-                // , enabledUpdate : true
-            },
-            {
-                title : 'hello2',
-                content : 'here comes description in details2'
-            },
-            {
-                title : 'hello1',
-                content : 'here comes description in details1'
-            },
-        ];
+            { title: 'HELLO5', content: 'Here comes description in details' },
+            { title: 'HELLO4', content: 'Here comes description in details' },
+            { title: 'HELLO3', content: 'Here comes description in details' }, //, enableUpdate : true 
+            { title: 'HELLO2', content: 'Here comes description in details' },
+            { title: 'HELLO1', content: 'Here comes description in details' },
 
+        ];
         const data = localStorage.getItem('post');
 
-        if(data){
+        if (data) {
             return JSON.parse(data);
         } else {
             return dummyPosts;
         }
-    };
-    //const [Posts, setPosts] = useState([]);
 
-    const [Posts] = useState(getLocalData()); 
+
+    };
+    //  const [Posts, setPosts] = useState([]);
+
+    const [Posts] = useState(getLocalData());
 
 
     useEffect(() => {
         localStorage.setItem('post', JSON.stringify(Posts));
     }, []);
 
-
-    return(
+    return (
         <main id="news" className='myScroll'>
             <h1>News</h1>
             {Posts.map((post, idx) => {
-                if (idx >=5) return; // 5개의 인덱스만 가져다 달라는 의미
+                if (idx >= 5) return; //5개의 인덱스만 가져다 달라는 의미
 
-                return(
+                return (
                     <article key={idx}>
                         <h2>{post.title}</h2>
                         <p>{post.content}</p>
                     </article>
-                )
-            })} 
+                );
+            })}
+
+            <ul>
+                {Members.map((member, idx) => {
+                    if (idx >= 3) return;
+                    return <li key={member.name}>{member.name}</li>
+                })}
+            </ul>
         </main>
-        
     );
 }
+export default News;
